@@ -1,0 +1,1 @@
+# ride-booking-intro\n\nA scalable, microservices-based ride-booking system inspired by platforms like Uber and Ola. This repository serves as the central documentation hub for the entire project, explaining its architecture, components, and workflows. For code, see the individual service repositories linked below.
