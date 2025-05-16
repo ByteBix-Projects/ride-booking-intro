@@ -120,16 +120,29 @@ erDiagram
 
 ---
 
+
+Here is the **Repository Structure table**, along with its purpose, tech stack, and GitHub link:
+
+---
+
 ## Repository Structure
 
-| Service                  | Purpose                          | Tech Stack                     | GitHub Link |
-|--------------------------|----------------------------------|--------------------------------|-------------|
-| API Gateway              | Central request router           | NGINX, Node.js                 | [Link](https://github.com/ByteBix-Projects/api-gateway) |
-| Ride Service             | Ride lifecycle management        | Go, PostgreSQL                 | [Link](https://github.com/ByteBix-Projects/ride-service) |
-| Location Service         | Real-time GPS tracking           | Python, Redis                  | [Link](https://github.com/ByteBix-Projects/location-service) |
-| Payment Service          | Transaction processing           | Node.js, Stripe                | [Link](https://github.com/ByteBix-Projects/payment-service) |
-| Dynamic Pricing Service  | Surge pricing engine             | Python, MLflow                 | [Link](https://github.com/ByteBix-Projects/pricing-service) |
-| Notification Service     | Real-time alerts                 | Go, Kafka                      | [Link](https://github.com/ByteBix-Projects/notification-service) |
+| Service / App             | Purpose                                   | Tech Stack                          | GitHub Link |
+|---------------------------|-------------------------------------------|-------------------------------------|-------------|
+| **Passenger App**         | Mobile app for passengers to book rides, track drivers, and manage payments | Flutter / React Native, Maps API    | [Link](https://github.com/ByteBix-Projects/riders-mobile-app) |
+| **Driver App**            | Mobile app for drivers to manage rides, navigation, and earnings            | Flutter / React Native, Maps API    | [Link](https://github.com/ByteBix-Projects/driver-app) |
+| **Admin Panel**           | Web interface for managing users, drivers, payments, analytics, and support  | React.js, Node.js, PostgreSQL, JWT  | [Link](https://github.com/ByteBix-Projects/admin-panel) |
+| API Gateway               | Central request router                    | NGINX, Node.js                      | [Link](https://github.com/ByteBix-Projects/api-gateway) |
+| Auth Service              | Authentication & authorization            | Node.js, JWT, OAuth2                | [Link](https://github.com/ByteBix-Projects/auth-service) |
+| Ride Service              | Ride lifecycle management                 | Go, PostgreSQL                      | [Link](https://github.com/ByteBix-Projects/ride-service) |
+| Matching Service          | Driver-passenger matching logic           | Python, Redis, gRPC                 | [Link](https://github.com/ByteBix-Projects/matching-service) |
+| Driver Service            | Driver management & availability          | Go, PostgreSQL                      | [Link](https://github.com/ByteBix-Projects/driver-service) |
+| Location Service          | Real-time GPS tracking                    | Python, Redis                       | [Link](https://github.com/ByteBix-Projects/location-service) |
+| Payment Service           | Transaction processing                    | Node.js, Stripe                     | [Link](https://github.com/ByteBix-Projects/payment-service) |
+| Dynamic Pricing Service   | Surge pricing engine                      | Python, MLflow                      | [Link](https://github.com/ByteBix-Projects/pricing-service) |
+| Notification Service      | Real-time alerts & notifications          | Go, Kafka                           | [Link](https://github.com/ByteBix-Projects/notification-service) |
+| Analytics Service         | Dashboards, reporting, BI                 | Python, TimescaleDB, Grafana        | [Link](https://github.com/ByteBix-Projects/analytics-service) |
+
 
 ---
 
@@ -239,6 +252,5 @@ MIT License - See [LICENSE](LICENSE) for details.
 ## Contact
 [Project Board](https://github.com/ByteBix-Projects/ride-booking/projects) | 
 [Slack Channel](https://bytebix.slack.com) | 
-[Email Support](mailto:support@bytebix.com)
+[Email Support](mailto:dev-support@bytebixtechnologies.com)
 
-This merged design combines architectural overview with technical depth while maintaining developer-friendly documentation structure.
