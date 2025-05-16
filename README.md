@@ -1,13 +1,13 @@
-# Ride-Booking System :oncoming_taxi:
+Here's the merged and enhanced system design incorporating elements from both versions:
 
-A scalable, microservices-based ride-booking system inspired by platforms like Uber and Ola. This repository serves as the **central documentation hub** for the entire project, explaining its architecture, components, and workflows. For code, see the individual service repositories linked below.
+# Ride-Booking System :oncoming_taxi:
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Architecture](https://img.shields.io/badge/Architecture-Microservices-green)](https://microservices.io)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen)]()
 
 ## Project Overview
-This system is designed to handle real-time ride booking, driver-passenger matching, payment processing, and analytics. It follows a **domain-driven microservices architecture** to ensure scalability, fault tolerance, and maintainability.
+A scalable, microservices-based ride-booking system with real-time capabilities, combining the best features of a ride hailing system. This repository serves as the **central documentation hub** with links to individual service repositories.
 
 ### Core Features
 | Passenger Features              | Driver Features                 | Admin Features                  |
@@ -24,80 +24,221 @@ This system is designed to handle real-time ride booking, driver-passenger match
 ### High-Level Design
 ```mermaid
 graph TD
-PA[Passenger App] --> API[API Gateway]
-DA[Driver App] --> API
-AP[Admin Panel] --> API
-API --> RS[Ride Service]
-API --> LS[Location Service]
-API --> PS[Payment Service]
-RS --> RMS[Ride Matching Service]
-LS --> RMS
-RMS --> NS[Notification Service]
-NS --> PA & DA
-PS --> DB[(Database Schema)]
-LS --> DB
-RS --> DB
+    %% Client Layer
+    PA[Passenger App] -->|HTTPS| AG[API Gateway]
+    DA[Driver App] --> AG
+    AP[Admin Panel] --> AG
+    
+    %% Service Layer
+    AG -->|Auth| AS[Auth Service]
+    AG --> RS[Ride Service]
+    AG --> LS[Location Service]
+    AG --> PS[Payment Service]
+    AG --> DS[Driver Service]
+    AG --> NS[Notification Service]
+    
+    %% Core Workflow
+    RS --> RMS[Ride Matching Service]
+    LS --> RMS
+    RMS -->|Match| DS
+    RS -->|Pricing| DPS[Dynamic Pricing Service]
+    
+    %% Data Layer
+    PS --> PD[(Payment DB)]
+    LS --> GD[(GeoDB)]
+    RS --> RD[(Ride DB)]
+    DS --> DD[(Driver DB)]
+    
+    %% External Services
+    LS --> MP[Map Provider]
+    PS --> PG[Payment Gateway]
+    NS --> PN[Push Service]
+    
+    style AG fill:#f0f4c3,stroke:#333
+    style RS fill:#c8e6c9,stroke:#333
 ```
 
-### Key Components
-1. **API Gateway**: Central entry point for all client requests (Passenger/Driver Apps, Admin Panel).
-2. **Ride Service**: Manages ride lifecycle (booking, fare calculation, status updates).
-3. **Location Service**: Handles real-time GPS tracking and geospatial data.
-4. **Ride Matching Service**: Matches riders with nearby drivers using proximity algorithms.
-5. **Payment Service**: Processes payments and refunds via Stripe/PayPal integration.
-6. **Notification Service**: Sends push/SMS alerts for ride updates.
-7. **Database Schema**: PostgreSQL (relational data) + Redis (caching) + Cassandra (analytics).
+### Enhanced Components
+
+1. **Auth Service** (New)
+   - JWT/OAuth2 authentication
+   - Role-based access control
+   - Session management
+
+2. **Dynamic Pricing Service** (Enhanced)
+   - Real-time surge pricing
+   - Machine learning predictions
+   ```python
+   def calculate_fare(base, distance, time, surge):
+       return (base + (distance * 1.5) + (time * 0.2)) * surge
+   ```
+
+3. **Driver Service** (Enhanced)
+   - Driver profile management
+   - Vehicle information
+   - Availability status
+
+4. **Analytics Service** (New)
+   - Real-time dashboards
+   - Ride pattern analysis
+   - Fraud detection
+
+---
+
+## Technical Specifications
+
+### Database Architecture
+```mermaid
+erDiagram
+    USERS ||--o{ RIDES : requests
+    DRIVERS ||--o{ VEHICLES : owns
+    RIDES {
+        string ride_id PK
+        string status
+        decimal fare
+        timestamp start_time
+        timestamp end_time
+    }
+    LOCATIONS {
+        decimal latitude
+        decimal longitude
+        timestamp updated_at
+    }
+    PAYMENTS {
+        string txn_id PK
+        decimal amount
+        string status
+    }
+```
+
+| Database       | Purpose                          | Technology     |
+|----------------|----------------------------------|----------------|
+| Ride DB        | Transactional data               | PostgreSQL     |
+| GeoDB          | Location tracking                | Redis + PostGIS|
+| Payment DB     | Financial transactions           | Cassandra      |
+| Analytics DB   | Business intelligence            | TimescaleDB    |
 
 ---
 
 ## Repository Structure
-The system is divided into 10 repositories, each focusing on a specific domain:
 
-| Repository                  | Purpose                          | Tech Stack                     |
-|-----------------------------|----------------------------------|--------------------------------|
-| [passenger-app](https://github.com/ByteBix-Projects/passenger-app) | Passenger-facing mobile app      | React Native, Google Maps API  |
-| [driver-app](https://github.com/ByteBix-Projects/driver-app)       | Driver-facing mobile app         | Flutter, Mapbox                |
-| [admin-panel](https://github.com/ByteBix-Projects/admin-panel)     | Web-based admin dashboard         | React.js, Node.js              |
-| [api-gateway](https://github.com/ByteBix-Projects/api-gateway)     | Central request router            | NGINX, Node.js, JWT            |
-| [ride-service](https://github.com/ByteBix-Projects/ride-service)   | Ride lifecycle management         | Go, PostgreSQL, Redis          |
-| [location-service](https://github.com/ByteBix-Projects/location-service) | Real-time tracking & geodata     | Python, PostGIS, Redis         |
-| [ride-matching-service](https://github.com/ByteBix-Projects/ride-matching-service) | Driver-passenger matching        | Java, Spring Boot, Redis       |
-| [payment-service](https://github.com/ByteBix-Projects/payment-service) | Payment processing               | Node.js, Stripe, PostgreSQL    |
-| [notification-service](https://github.com/ByteBix-Projects/notification-service) | Alerts & notifications           | Python, Firebase, Celery       |
-| [database-schema](https://github.com/ByteBix-Projects/database-schema) | Database structure & migrations   | PostgreSQL, Cassandra, SQLAlchemy |
+| Service                  | Purpose                          | Tech Stack                     | GitHub Link |
+|--------------------------|----------------------------------|--------------------------------|-------------|
+| API Gateway              | Central request router           | NGINX, Node.js                 | [Link](https://github.com/ByteBix-Projects/api-gateway) |
+| Ride Service             | Ride lifecycle management        | Go, PostgreSQL                 | [Link](https://github.com/ByteBix-Projects/ride-service) |
+| Location Service         | Real-time GPS tracking           | Python, Redis                  | [Link](https://github.com/ByteBix-Projects/location-service) |
+| Payment Service          | Transaction processing           | Node.js, Stripe                | [Link](https://github.com/ByteBix-Projects/payment-service) |
+| Dynamic Pricing Service  | Surge pricing engine             | Python, MLflow                 | [Link](https://github.com/ByteBix-Projects/pricing-service) |
+| Notification Service     | Real-time alerts                 | Go, Kafka                      | [Link](https://github.com/ByteBix-Projects/notification-service) |
+
+---
+
+## Key Workflows
+
+### Ride Booking Sequence
+```mermaid
+sequenceDiagram
+    Passenger->>+API Gateway: Request Ride
+    API Gateway->>Ride Service: Create Ride
+    Ride Service->>Pricing Service: Get Fare
+    Pricing Service->>Ride Service: Return Quote
+    Ride Service->>Matching Service: Find Drivers
+    Matching Service->>Location Service: Nearby Drivers
+    Location Service->>Matching Service: Driver List
+    Matching Service->>Driver App: Notify Drivers
+    Driver App->>Matching Service: Accept Ride
+    Matching Service->>Ride Service: Confirm Match
+    Ride Service->>Payment Service: Authorize Payment
+    Payment Service->>Ride Service: Payment Status
+    Ride Service->>Notification Service: Send Confirmations
+```
+
+---
+
+## Operational Excellence
+
+### Monitoring Stack
+| Metric                | Tool          | Alert Threshold |
+|-----------------------|---------------|-----------------|
+| API Latency           | Prometheus    | >500ms p95      |
+| Error Rate            | Grafana       | >1%             |
+| Payment Success       | Datadog       | <99%            |
+| Driver Response Time  | New Relic     | >30s            |
+
+### Disaster Recovery
+```mermaid
+graph LR
+    A[Primary Region] -->|Async Replication| B[Secondary Region]
+    A -->|Daily Backups| C[S3 Glacier]
+    B -->|Failover| D[CDN Edge]
+```
+
+- RTO: 15 minutes
+- RPO: 5 minutes
+- Multi-AZ deployment
+
+---
+
+## Security Measures
+
+1. **Data Protection**
+   - AES-256 encryption at rest
+   - TLS 1.3 for all communications
+   - PCI-DSS compliance for payments
+
+2. **Access Control**
+   - RBAC with JWT claims
+   - Vault for secret management
+   - Biometric authentication
+
+3. **Fraud Prevention**
+   - Velocity checking
+   - ML-based anomaly detection
+   - Driver rating system
 
 ---
 
 ## Getting Started
-### Prerequisites
-- Docker >= 20.10
-- Kubernetes (for production deployment)
-- Node.js 18.x / Go 1.21 / Python 3.11
 
-### Local Setup (Example: Ride Service)
-```
+### Local Development
+```bash
+# Clone sample service
 git clone https://github.com/ByteBix-Projects/ride-service.git
 cd ride-service
-docker-compose up -d # Starts PostgreSQL and Redis
-go run main.go
+.......
+.......
+```
+
+### Production Deployment
+```bash
+.......
+.......
 ```
 
 ---
 
 ## Contribution Guidelines
-1. **Fork** the repository you want to contribute to.
-2. Create a **feature branch**:  
-   `git checkout -b feat/your-feature-name`
-3. Follow the [Conventional Commits](https://www.conventionalcommits.org/) standard.
-4. Open a **Pull Request** with a detailed description of changes.
+
+1. **Branch Strategy**
+   - `main`: Production releases
+   - `staging`: Pre-production testing
+   - `feature/*`: New developments
+
+2. **Code Standards**
+   - 90% test coverage
+   - SonarQube static analysis
+   - Conventional commits
 
 ---
 
 ## License
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+MIT License - See [LICENSE](LICENSE) for details.
 
 ---
 
 ## Contact
-For questions or collaborations, contact [Project Lead](mailto:contact@bytebixtechnologies.com) or join our [Slack Channel](https://bytebix.slack.com).
+[Project Board](https://github.com/ByteBix-Projects/ride-booking/projects) | 
+[Slack Channel](https://bytebix.slack.com) | 
+[Email Support](mailto:support@bytebix.com)
 
+This merged design combines architectural overview with technical depth while maintaining developer-friendly documentation structure.
