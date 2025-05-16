@@ -54,8 +54,8 @@ graph TD
     PS --> PG[Payment Gateway]
     NS --> PN[Push Service]
     
-    style AG fill:#f0f4c3,stroke:#333
-    style RS fill:#c8e6c9,stroke:#333
+    style AG fill:#4f0015,stroke:#fff
+    style RS fill:#4f0015,stroke:#fff
 ```
 
 ### Enhanced Components
